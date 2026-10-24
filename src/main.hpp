@@ -1,6 +1,9 @@
-#ifndef MAIN_H
-#define MAIN_H
+#pragma once
 
-int main(int, char**);
+#include <Windows.h>
 
-#endif // MAIN_H
+namespace backup_service {
+
+inline constexpr wchar_t service_name[] = L"SMIT52BackupService";
+
+} // namespace backup_service

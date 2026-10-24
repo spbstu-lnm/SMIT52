@@ -1,0 +1,4 @@
+source_directory=\\localhost\C$\Data\Documents
+archive_path=\\localhost\C$\Backups\documents.zip
+patterns=*.docx;*.pdf;important.txt
+interval_seconds=60

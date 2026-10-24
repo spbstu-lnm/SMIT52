@@ -39,6 +39,7 @@
 *.app
 
 # Build directories
+out/
 build/
 Build/
 build-*/
