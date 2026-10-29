@@ -2,8 +2,8 @@
  * @file main.cpp
  * @author linome (francukigor549@gmail.com)
  * @brief Main entry point of backup service for Windows.
- * @version 0.1.0
- * @date 2026-10-24
+ * @version 1.0.0
+ * @date 2026-10-29
  * 
  * @details
  * Program should work as a service on Windows (7 and later).
