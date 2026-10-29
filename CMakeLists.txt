@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+find_package(libzip CONFIG REQUIRED)
+
 add_executable(SMIT52
     src/main.cpp
     src/config.cpp
@@ -18,7 +20,7 @@ add_executable(SMIT52
     src/zip_archive.hpp)
 
 target_compile_definitions(SMIT52 PRIVATE UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX)
-target_link_libraries(SMIT52 PRIVATE Advapi32 Netapi32)
+target_link_libraries(SMIT52 PRIVATE Advapi32 Netapi32 libzip::zip)
 
 if(MINGW)
     target_link_options(SMIT52 PRIVATE -municode)

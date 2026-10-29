@@ -11,7 +11,7 @@ cmake --preset win-clang
 cmake --build out/build/win-clang --config Debug
 ```
 
-The service uses only the Windows Service Control Manager API and the C++ standard library. The ZIP writer supports classic ZIP limits: each file and the complete archive must be smaller than 4 GiB, with at most 65,535 files.
+The service uses the Windows Service Control Manager API, the C++ standard library, and libzip to update the ZIP archive.
 
 ## Configuration
 
@@ -24,7 +24,7 @@ patterns=*.docx;*.pdf;important.txt
 interval_seconds=60
 ```
 
-`source_directory` is scanned recursively. `archive_path` is replaced with a fresh snapshot after each scan, so new, modified, and removed files are reflected on the next run. Patterns match each file's name (not its relative directory); `*` matches any sequence and `?` matches one character. Separate patterns with semicolons. `interval_seconds` is optional and defaults to 60 (valid range: 1 through 86,400).
+`source_directory` is scanned recursively. The configured archive is opened and updated on each scan: matching new files are added and matching existing files are replaced with their current contents. Existing archive entries are retained, including entries whose source files have since been removed. Patterns match each file's name (not its relative directory); `*` matches any sequence and `?` matches one character. Separate patterns with semicolons. `interval_seconds` is optional and defaults to 60 (valid range: 1 through 86,400).
 
 The service defaults to the LocalSystem account. For remote UNC shares, grant the service account access or configure a dedicated account for the service with Windows Service Manager before starting it. Drive-letter mappings from an interactive user session are not available to services; use UNC paths.
 
@@ -45,5 +45,5 @@ Run an elevated terminal in the executable directory. The commands are passed as
 ## Notes
 
 - The service reports `START_PENDING`, `RUNNING`, `STOP_PENDING`, and `STOPPED` to SCM and handles stop, shutdown, and interrogate controls.
-- A new archive is written to a temporary sibling file and replaces the previous archive only after the ZIP is complete.
+- libzip updates the configured archive in place, retaining its existing entries while adding or replacing entries found in the source directory.
 - Symbolic links are skipped to avoid traversing outside the configured source tree.

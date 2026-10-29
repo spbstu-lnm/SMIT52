@@ -11,7 +11,7 @@ struct zip_entry_source {
     std::string archive_name;
 };
 
-void write_zip_archive(const std::filesystem::path& archive_path,
-                       const std::vector<zip_entry_source>& sources);
+void update_zip_archive(const std::filesystem::path& archive_path,
+                        const std::vector<zip_entry_source>& sources);
 
 } // namespace backup_service

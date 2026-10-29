@@ -51,7 +51,6 @@ void create_backup(const configuration& config, const std::function<bool()>& sho
     }
 
     const auto archive_path = normalized_path(config.archive_path);
-    const std::filesystem::path temporary_path = archive_path.wstring() + L".tmp";
     std::vector<zip_entry_source> files;
     std::error_code error;
     std::filesystem::recursive_directory_iterator iterator(
@@ -82,8 +81,7 @@ void create_backup(const configuration& config, const std::function<bool()>& sho
             continue;
         }
         if (!std::filesystem::is_regular_file(status) ||
-            normalized_path(iterator->path()) == archive_path ||
-            normalized_path(iterator->path()) == temporary_path) {
+            normalized_path(iterator->path()) == archive_path) {
             continue;
         }
 
@@ -112,17 +110,7 @@ void create_backup(const configuration& config, const std::function<bool()>& sho
     if (!archive_directory.empty()) {
         std::filesystem::create_directories(archive_directory);
     }
-    try {
-        write_zip_archive(temporary_path, files);
-        if (!MoveFileExW(temporary_path.c_str(), archive_path.c_str(),
-                         MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH)) {
-            throw std::system_error(static_cast<int>(GetLastError()), std::system_category(),
-                                    "Cannot replace backup archive");
-        }
-    } catch (...) {
-        std::filesystem::remove(temporary_path, error);
-        throw;
-    }
+    update_zip_archive(archive_path, files);
 }
 
 } // namespace backup_service
